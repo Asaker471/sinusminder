@@ -1,0 +1,6 @@
+version: "Apple Swift version 5.5.2 (swiftlang-1300.0.47.5 clang-1300.0.29.30)"
+options: "caba386eed2024bc42e7c7417caa91c5cb0360cd9aa0b6b82473726ddb37387e"
+build_start_time: [1681262439, 270515918]
+build_end_time: [1681262440, 831028938]
+inputs:
+  "/Users/omarasaker/Desktop/calendar_app/calendar_app/ios/Runner/AppDelegate.swift": [1680204744, 0]

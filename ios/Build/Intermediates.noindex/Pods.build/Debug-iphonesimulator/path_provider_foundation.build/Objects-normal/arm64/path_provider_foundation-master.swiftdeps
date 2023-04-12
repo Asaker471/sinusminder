@@ -1,0 +1,7 @@
+version: "Apple Swift version 5.5.2 (swiftlang-1300.0.47.5 clang-1300.0.29.30)"
+options: "30773877af673ad64ab80f2e2d11ee9a24eeee8f268b0aacf6b33343a52cc033"
+build_start_time: [1681257349, 249017953]
+build_end_time: [1681257354, 277728080]
+inputs:
+  "/Users/omarasaker/.pub-cache/hosted/pub.dev/path_provider_foundation-2.2.2/ios/Classes/PathProviderPlugin.swift": [1681255445, 813850402]
+  "/Users/omarasaker/.pub-cache/hosted/pub.dev/path_provider_foundation-2.2.2/ios/Classes/messages.g.swift": [1681255445, 814891338]
