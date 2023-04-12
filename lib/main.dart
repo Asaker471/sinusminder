@@ -122,6 +122,7 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:provider/provider.dart';
 import 'event_editing_page.dart';
+import 'event_provider.dart';
 
 void main() {
   runApp(MyAppointmentScheduler());
@@ -131,17 +132,18 @@ class MyAppointmentScheduler extends StatelessWidget {
   static String title = 'SinusMinder';
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: title,
-      theme: ThemeData.dark(),
-      darkTheme: ThemeData.dark().copyWith(
-        primaryColor: Colors.red,
-      ),
-      home: MyAppointmentSchedulerHomePage(),
-    );
-  }
+  Widget build(BuildContext context) => ChangeNotifierProvider(
+        create: (context) => EventProvider(),
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: title,
+          theme: ThemeData.dark(),
+          darkTheme: ThemeData.dark().copyWith(
+            primaryColor: Colors.red,
+          ),
+          home: MyAppointmentSchedulerHomePage(),
+        ),
+      );
 }
 
 class MyAppointmentSchedulerHomePage extends StatelessWidget {

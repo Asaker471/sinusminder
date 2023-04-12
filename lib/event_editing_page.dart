@@ -1,12 +1,8 @@
-import 'package:calendar_app/calendarwidget.dart';
 import 'package:calendar_app/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tz;
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:provider/provider.dart';
 import 'event.dart';
+import 'event_provider.dart';
 
 class EventEditingPage extends StatefulWidget {
   final Event? event;
@@ -71,7 +67,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
             primary: Colors.transparent,
             shadowColor: Colors.transparent,
           ),
-          onPressed: () {},
+          onPressed: saveForm,
           icon: Icon(Icons.done),
           label: Text('SAVE'),
         )
@@ -83,9 +79,10 @@ class _EventEditingPageState extends State<EventEditingPage> {
           border: UnderlineInputBorder(),
           hintText: 'Event Description',
         ),
-        onFieldSubmitted: (_) {},
-        validator: (title) =>
-            title != null && title.isEmpty ? 'Input an event!' : null,
+        onFieldSubmitted: (_) => saveForm(),
+        validator: (title) => title != null && title.isEmpty
+            ? 'Make sure to add event description.'
+            : null,
         controller: titleController,
       );
 
@@ -104,13 +101,13 @@ class _EventEditingPageState extends State<EventEditingPage> {
               flex: 2,
               child: buildDropdownField(
                 text: Utils.toDate(fromDate),
-                onClicked: () {},
+                onClicked: () => pickFromDateTime(pickDate: true),
               ),
             ),
             Expanded(
               child: buildDropdownField(
                 text: Utils.toTime(fromDate),
-                onClicked: () {},
+                onClicked: () => pickFromDateTime(pickDate: false),
               ),
             ),
           ],
@@ -125,18 +122,74 @@ class _EventEditingPageState extends State<EventEditingPage> {
               flex: 2,
               child: buildDropdownField(
                 text: Utils.toDate(toDate),
-                onClicked: () {},
+                onClicked: () => pickToDateTime(pickDate: true),
               ),
             ),
             Expanded(
               child: buildDropdownField(
                 text: Utils.toTime(toDate),
-                onClicked: () {},
+                onClicked: () => pickToDateTime(pickDate: false),
               ),
             ),
           ],
         ),
       );
+
+  Future pickFromDateTime({required bool pickDate}) async {
+    final date = await pickDateTime(fromDate, pickDate: pickDate);
+    if (date == null) return;
+
+    if (date.isAfter(toDate)) {
+      toDate =
+          DateTime(date.year, date.month, date.day, toDate.hour, toDate.minute);
+    }
+    setState(() => fromDate = date);
+  }
+
+  Future pickToDateTime({required bool pickDate}) async {
+    final date = await pickDateTime(
+      toDate,
+      pickDate: pickDate,
+      firstDate: pickDate ? fromDate : null,
+    );
+    if (date == null) return;
+
+    setState(() => fromDate = date);
+  }
+
+  Future<DateTime?> pickDateTime(
+    DateTime initialDate, {
+    required bool pickDate,
+    DateTime? firstDate,
+  }) async {
+    if (pickDate) {
+      final date = await showDatePicker(
+        context: context,
+        initialDate: initialDate,
+        firstDate: firstDate ?? DateTime(2015, 8),
+        lastDate: DateTime(2101),
+      );
+
+      if (date == null) return null;
+
+      final time =
+          Duration(hours: initialDate.hour, minutes: initialDate.minute);
+
+      return date.add(time);
+    } else {
+      final timeofDay = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.fromDateTime(initialDate),
+      );
+
+      if (timeofDay == null) return null;
+
+      final date =
+          DateTime(initialDate.year, initialDate.month, initialDate.day);
+      final time = Duration(hours: timeofDay.hour, minutes: timeofDay.minute);
+      return date.add(time);
+    }
+  }
 
   Widget buildDropdownField({
     required String text,
@@ -162,4 +215,22 @@ class _EventEditingPageState extends State<EventEditingPage> {
           child,
         ],
       );
+
+  Future saveForm() async {
+    final isValid = _formKey.currentState!.validate();
+
+    if (isValid) {
+      final event = Event(
+        title: titleController.text,
+        description: 'Description',
+        from: fromDate,
+        to: toDate,
+      );
+
+      final provider = Provider.of<EventProvider>(context, listen: false);
+      provider.addEvent(event);
+
+      Navigator.of(context).pop();
+    }
+  }
 }
