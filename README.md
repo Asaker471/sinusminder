@@ -1,17 +1,3 @@
-# calendar_app
+# SinusMinder Application
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-# calendar_app
+This is a mobile application that helps chronic sinusitis patients improve their medical adherence by using a calendar that sends constant reminders to them and help them stay on top of their medication schedule.
