@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:provider/provider.dart';
 import 'event_data_source.dart';
+import 'tasks_widget.dart';
 
 class CalendarWidget extends StatelessWidget {
   @override
@@ -13,6 +14,14 @@ class CalendarWidget extends StatelessWidget {
       dataSource: EventDataSource(events),
       initialSelectedDate: DateTime.now(),
       cellBorderColor: Colors.transparent,
+      onLongPress: (details) {
+        final provider = Provider.of<EventProvider>(context, listen: false);
+        provider.setDate(details.date!);
+        showModalBottomSheet(
+          context: context,
+          builder: (context) => TasksWidget(),
+        );
+      },
     );
   }
 }
